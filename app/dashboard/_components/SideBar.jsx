@@ -1,22 +1,34 @@
 "use client"
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation'
-import Image from 'next/image'
-import { HiHome, HiBolt, HiMiniPower } from "react-icons/hi2"
-import { MdOutlineContentPasteSearch } from "react-icons/md"
+import { usePathname } from 'next/navigation';
+import Image from 'next/image';
+import { HiHome, HiBolt, HiMiniPower } from "react-icons/hi2";
+import { MdOutlineContentPasteSearch } from "react-icons/md";
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 function LinearProgressWithLabel({ value }) {
     return (
-        <Box display="flex" alignItems="center" className="mt-5 w-full">
+        <Box display="flex" alignItems="center" className="mt-2 w-full">
             <Box width="100%" mr={1}>
-                <LinearProgress variant="determinate" value={value} />
+                <LinearProgress
+                    variant="determinate"
+                    value={value}
+                    sx={{
+                        height: 8,
+                        borderRadius: 5,
+                        [`& .MuiLinearProgress-bar`]: {
+                            backgroundColor: '#FF7B74',
+                        },
+                    }}
+                />
             </Box>
             <Box minWidth={35}>
-                <Typography variant="body2" color="textSecondary">{`${Math.round(value)}%`}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {`${Math.round(value)}%`}
+                </Typography>
             </Box>
         </Box>
     );
@@ -43,6 +55,7 @@ function SideBar() {
     return (
         <div className="fixed h-full md:w-64 p-5 shadow-md flex flex-col justify-between">
             <div>
+                {/* Logo */}
                 <div className="w-full flex justify-center items-center mb-2 -ml-8 overflow-hidden">
                     <Image
                         src="/recipe.png"
@@ -62,10 +75,10 @@ function SideBar() {
                         <Link href={item.path} key={item.id}>
                             <div
                                 className={`flex items-center gap-2 text-gray-600 p-3 cursor-pointer hover:bg-gray-100 hover:text-black rounded-lg ${
-                                    item.path === path && 'bg-gray-100 text-black rounded-lg mb-3' 
+                                    item.path === path && 'bg-gray-100 text-black mb-3'
                                 }`}
                             >
-                                <div className='text-2xl'>{item.icon}</div>
+                                <div className="text-2xl">{item.icon}</div>
                                 <h2>{item.name}</h2>
                             </div>
                         </Link>
@@ -73,17 +86,18 @@ function SideBar() {
                 </ul>
             </div>
 
-            {/* Bottom block: progress bar + text */}
+            {/* Bottom block: Progress bar and text */}
             <div className="flex flex-col gap-1">
                 <LinearProgressWithLabel value={progress} />
                 <p className="text-sm text-gray-700">3 out of 5 Recipes created!</p>
                 <p className="text-xs text-gray-500">Upgrade your plan for unlimited Recipe Generation</p>
             </div>
         </div>
-    )
+    );
 }
 
 export default SideBar;
+
 
 
 
