@@ -2,7 +2,10 @@ import React from 'react'
 
 function Ingredients() {
   return (
-    <div>Ingredients</div>
+    <div>
+      {/* Input Topic*/}
+      {/* Text Area Desc*/}
+    </div>
   )
 }
 

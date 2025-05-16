@@ -2,16 +2,31 @@ export default[
     {
         id:1,
         name:'Italian',
-        icon:'/italian.png'
+        icon:'/italian.jpeg'
     },
     {
         id:2,
         name:'Indian',
-        icon:'/italian.png'
+        icon:'/indian.jpg'
     },
     {
         id:3,
         name:'Chinese',
-        icon:'/italian.png'
-    }
+        icon:'/chinese.avif'
+    },
+    {
+        id:4,
+        name:'Mexican',
+        icon:'/mexican.jpg'
+    },
+    {
+        id:5,
+        name:'French',
+        icon:'/french.jpg'
+    },
+    {
+        id:6,
+        name:'Korean',
+        icon:'/korean.jpeg'
+    },
 ]

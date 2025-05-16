@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Button } from '../../components/ui/button';
 import { HiViewGrid, HiServer, HiOutlineAdjustments } from "react-icons/hi";
 import SelectCategory from './_components/SelectCategory';
-
+import Ingredients from './_components/Ingredients';
 const StepperOptions = [
   {
     id: 1,
@@ -54,7 +54,7 @@ function CreateRecipe() {
 
         {/* Navigation Buttons */}
         <div className='px-10 md:px-20 lg:px-44 mt-10 w-full'>
-          {activeIndex === 0 ? <SelectCategory /> : null}
+          {activeIndex === 0 ? <SelectCategory /> :activeIndex==1?<Ingredients/>: null}
           <div className='flex justify-between w-full'>
             <Button
               disabled={activeIndex === 0}
