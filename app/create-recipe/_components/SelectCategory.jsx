@@ -4,6 +4,9 @@ import Image from 'next/image'
 
 function SelectCategory() {
   return (
+    <div>
+      <h2>Select the Recipe Category</h2>
+   
     <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 px-10 md:px-20'>
   {CategoryList.map((item, index) => (
     <div key={index} className='flex flex-col p-5 border items-center rounded-xl hover:border-primary hover:bg-pink-50 cursor-pointer'>
@@ -12,6 +15,7 @@ function SelectCategory() {
     </div>
   ))}
 </div>
+ </div>
   )
 }
 
