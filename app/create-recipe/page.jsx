@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect, useContext } from 'react';
 import { Button } from '../../components/ui/button';
 import { UserInputContext } from '../_context/UserInputContext';
@@ -32,6 +32,16 @@ function CreateRecipe() {
   useEffect(() => {
     console.log(userRecipeInput);
   }, [userRecipeInput]);
+
+  const checkStatus = () => {
+    if (!userRecipeInput || Object.keys(userRecipeInput).length === 0) return true;
+
+    if (activeIndex === 0 && !userRecipeInput.category) return true;
+    if (activeIndex === 1 && (!userRecipeInput.topic || userRecipeInput.topic.length === 0)) return true;
+    if (activeIndex === 2 && (!userRecipeInput.duration || userRecipeInput.duration.length === 0)) return true;
+
+    return false;
+  };
 
   return (
     <div>
@@ -69,7 +79,7 @@ function CreateRecipe() {
               <SelectOption />}
 
           {/* Navigation Buttons */}
-          <div className='flex justify-between w-full'>
+          <div className='flex justify-between w-full mt-6'>
             <Button
               disabled={activeIndex === 0}
               onClick={() => setActiveIndex(activeIndex - 1)}
@@ -80,6 +90,7 @@ function CreateRecipe() {
 
             {activeIndex < StepperOptions.length - 1 ? (
               <Button
+                disabled={checkStatus()}
                 onClick={() => setActiveIndex(activeIndex + 1)}
                 className='bg-[#FF7B74] hover:bg-[#ff6b62] text-white font-bold'
               >
@@ -87,6 +98,7 @@ function CreateRecipe() {
               </Button>
             ) : (
               <Button
+                disabled={checkStatus()}
                 onClick={() => {
                   console.log('Generating Recipe Layout...');
                 }}

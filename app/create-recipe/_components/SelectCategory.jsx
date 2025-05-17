@@ -6,12 +6,13 @@ import { UserInputContext } from '../../_context/UserInputContext';
 function SelectCategory() {
   const {userRecipeInput,setUserRecipeInput}=useContext(UserInputContext);
 
-  const handleCategoryChange=(category)=>{
-    setUserRecipeInput(prev=>({
-      ...prev,
-      category:category
-    }))
-  }
+  const handleCategoryChange = (category) => {
+  setUserRecipeInput((prev) => ({
+    ...prev,
+    category: prev.category === category ? '' : category, // Toggle selection
+  }));
+};
+
   return (
     <div className='px-10 md:px-20'>
       <h2 className='my-5'>Select the Recipe Category</h2>
