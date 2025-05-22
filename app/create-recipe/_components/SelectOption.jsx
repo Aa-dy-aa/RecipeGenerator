@@ -5,8 +5,9 @@ import { UserInputContext } from '../../_context/UserInputContext';
 function SelectOption() {
   const { userRecipeInput, setUserRecipeInput } = useContext(UserInputContext);
 
-  const [category, setCategory] = useState('');
-  const [duration, setDuration] = useState('');
+  const [cuisine, setCuisine] = useState(userRecipeInput?.cuisine || '');
+  const [duration, setDuration] = useState(userRecipeInput?.duration || '');
+  const [addVideo, setAddVideo] = useState(userRecipeInput?.addVideo || '');
 
   const handleInputChange = (field, value) => {
     setUserRecipeInput(prev => ({
@@ -18,19 +19,20 @@ function SelectOption() {
   return (
     <div className='px-10 md:px-20 lg:px-44 py-10'>
       <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
+        {/* Cuisine Selector */}
         <div>
           <FormControl fullWidth>
-            <InputLabel id="category-label">Select Category</InputLabel>
+            <InputLabel id="cuisine-label">Select Cuisine Category</InputLabel>
             <Select
-              labelId="category-label"
-              value={category}
-              defaultValue={userRecipeInput?.category}
-              label="Select Category"
+              labelId="cuisine-label"
+              value={cuisine}
+              label="Select Cuisine Category"
               onChange={(e) => {
-                setCategory(e.target.value);
-                handleInputChange('category', e.target.value);
+                setCuisine(e.target.value);
+                handleInputChange('cuisine', e.target.value);
               }}
             >
+              <MenuItem value="">None</MenuItem>
               <MenuItem value="vegetarian">Vegetarian</MenuItem>
               <MenuItem value="non-vegetarian">Non-Vegetarian</MenuItem>
               <MenuItem value="vegan">Vegan</MenuItem>
@@ -38,22 +40,44 @@ function SelectOption() {
             </Select>
           </FormControl>
         </div>
+
+        {/* Duration Selector */}
         <div>
           <FormControl fullWidth>
             <InputLabel id="duration-label">Select Duration</InputLabel>
             <Select
               labelId="duration-label"
               value={duration}
-              defaultValue={userRecipeInput?.duration}
               label="Select Duration"
               onChange={(e) => {
                 setDuration(e.target.value);
                 handleInputChange('duration', e.target.value);
               }}
             >
+              <MenuItem value="">None</MenuItem>
               <MenuItem value="20mins">20mins</MenuItem>
               <MenuItem value="45mins">45mins</MenuItem>
               <MenuItem value="60mins">60mins</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+
+        {/* Video Option */}
+        <div>
+          <FormControl fullWidth>
+            <InputLabel id="video-label">Add Video?</InputLabel>
+            <Select
+              labelId="video-label"
+              value={addVideo}
+              label="Add Video?"
+              onChange={(e) => {
+                setAddVideo(e.target.value);
+                handleInputChange('addVideo', e.target.value);
+              }}
+            >
+              <MenuItem value="">None</MenuItem>
+              <MenuItem value="yes">Yes</MenuItem>
+              <MenuItem value="no">No</MenuItem>
             </Select>
           </FormControl>
         </div>
@@ -63,5 +87,7 @@ function SelectOption() {
 }
 
 export default SelectOption;
+
+
 
 

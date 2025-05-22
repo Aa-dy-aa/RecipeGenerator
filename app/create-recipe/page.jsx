@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Button } from '../../components/ui/button';
 import { UserInputContext } from '../_context/UserInputContext';
+import { GenerateRecipeLayout_AI } from '../../configs/AiModel';
 import { HiViewGrid, HiServer, HiOutlineAdjustments } from "react-icons/hi";
 import SelectCategory from './_components/SelectCategory';
 import SelectOption from './_components/SelectOption';
@@ -27,7 +28,8 @@ const StepperOptions = [
 
 function CreateRecipe() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const { userRecipeInput, setUserRecipeInput } = useContext(UserInputContext);
+  const { userRecipeInput } = useContext(UserInputContext);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     console.log(userRecipeInput);
@@ -43,6 +45,60 @@ function CreateRecipe() {
     return false;
   };
 
+  const GenerateRecipeLayout = async () => {
+  setLoading(true);
+
+  const cuisineType = userRecipeInput?.cuisine; // e.g., Italian, Indian
+  const cuisineCategory = userRecipeInput?.category; // e.g., veg, non veg, dessert
+  const ingredients = userRecipeInput?.topic;
+  const duration = userRecipeInput?.duration;
+
+  const USER_INPUT_PROMPT = `
+Generate a detailed recipe using the following constraints:
+- Cuisine Type (e.g. Indian, Italian, Mexican): "${cuisineType}"
+- Cuisine Category (e.g. veg, non veg, dessert, vegan): "${cuisineCategory}"
+- Ingredients (with quantity): "${ingredients}"
+- Preparation Duration: "${duration}"
+
+Output the result strictly as a JSON object with the following fields:
+{
+  "recipeName": string,
+  "cuisine": string,
+  "cuisineCategory": string,
+  "ingredients": [
+    {
+      "name": string,
+      "quantity": string,
+      "unit": string
+    }
+  ],
+  "totalDuration": string,
+  "steps": [
+    "Step 1 instruction...",
+    "Step 2 instruction...",
+    ...
+  ]
+}
+Ensure the recipe is an authentic ${cuisineType} dish. Do not include any introductory text or notes. Only output the JSON object.
+`;
+
+  console.log("Prompt Sent to AI:\n", USER_INPUT_PROMPT);
+
+  const result = await GenerateRecipeLayout_AI.sendMessage(USER_INPUT_PROMPT);
+  const responseText = await result.response?.text();
+  console.log("Raw Response from AI:\n", responseText);
+
+  try {
+    const parsed = JSON.parse(responseText);
+    console.log("Parsed Recipe:\n", parsed);
+  } catch (err) {
+    console.error("Failed to parse JSON response:", err);
+  }
+
+  setLoading(false);
+};
+
+
   return (
     <div>
       {/* Stepper */}
@@ -52,7 +108,6 @@ function CreateRecipe() {
         <div className='flex items-center mt-8'>
           {StepperOptions.map((item, index) => (
             <div key={item.id} className='flex items-center'>
-              {/* Step Icon */}
               <div className='flex flex-col items-center w-[50px] md:w-[100px]'>
                 <div className={`p-3 rounded-full text-white text-xl w-12 h-12 flex items-center justify-center
                   ${activeIndex >= index ? 'bg-[#FF7B74]' : 'bg-gray-200'}`}>
@@ -62,8 +117,6 @@ function CreateRecipe() {
                   {item.name}
                 </h2>
               </div>
-
-              {/* Connector Line */}
               {index < StepperOptions.length - 1 && (
                 <div className={`h-1 w-[50px] md:w-[100px] mx-2 -mt-[15px] transition-all duration-300
                   ${activeIndex > index ? 'bg-[#FF7B74]' : 'bg-gray-300'}`}></div>
@@ -99,9 +152,7 @@ function CreateRecipe() {
             ) : (
               <Button
                 disabled={checkStatus()}
-                onClick={() => {
-                  console.log('Generating Recipe Layout...');
-                }}
+                onClick={() => GenerateRecipeLayout()}
                 className='bg-[#FF7B74] hover:bg-[#ff6b62] text-white font-bold'
               >
                 Generate Recipe Layout
@@ -115,6 +166,7 @@ function CreateRecipe() {
 }
 
 export default CreateRecipe;
+
 
 
 
