@@ -7,6 +7,7 @@ import { HiViewGrid, HiServer, HiOutlineAdjustments } from "react-icons/hi";
 import SelectCategory from './_components/SelectCategory';
 import SelectOption from './_components/SelectOption';
 import Ingredients from './_components/Ingredients';
+import LoadingDialog from './_components/LoadingDialog';
 
 const StepperOptions = [
   {
@@ -29,7 +30,7 @@ const StepperOptions = [
 function CreateRecipe() {
   const [activeIndex, setActiveIndex] = useState(0);
   const { userRecipeInput } = useContext(UserInputContext);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     console.log(userRecipeInput);
@@ -161,6 +162,7 @@ Ensure the recipe is an authentic ${cuisineType} dish. Do not include any introd
           </div>
         </div>
       </div>
+      <LoadingDialog loading={loading}/>
     </div>
   );
 }
