@@ -29,12 +29,10 @@ export default function AlertDialog({loading}) {
         <DialogTitle id="alert-dialog-title">
         </DialogTitle>
         <DialogContent >
-          <DialogContentText id="alert-dialog-description">
             <div className='flex flex-col items-center py-10'>
-              <Image src={'/loader.gif'} width={100} height={100}/>
+              <Image src={'/loader.gif'} width={100} height={100} alt="Loading spinner"/>
               <h2>Please wait... AI is working on your Recipe</h2>
             </div>
-          </DialogContentText>
         </DialogContent>
       </Dialog>
     </React.Fragment>

@@ -30,7 +30,7 @@ const StepperOptions = [
 function CreateRecipe() {
   const [activeIndex, setActiveIndex] = useState(0);
   const { userRecipeInput } = useContext(UserInputContext);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     console.log(userRecipeInput);
