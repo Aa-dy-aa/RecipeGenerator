@@ -10,6 +10,8 @@ import Ingredients from './_components/Ingredients';
 import LoadingDialog from './_components/LoadingDialog';
 import {useUser} from '@clerk/nextjs';
 import { saveRecipeToDatabase } from '../../actions';
+import {useRouter} from 'next/navigation';
+
 const StepperOptions = [
   {
     id: 1,
@@ -33,6 +35,7 @@ function CreateRecipe() {
   const { userRecipeInput } = useContext(UserInputContext);
   const [loading, setLoading] = useState(false);
   const {user}=useUser();
+  const router=useRouter()
 
   useEffect(() => {
     console.log(userRecipeInput);
@@ -99,37 +102,39 @@ Ensure the recipe is an authentic ${cuisineType} dish. Do not include any introd
       const recipeLayout = JSON.parse(responseText);
       console.log("Parsed Recipe:\n", recipeLayout);
 
-      // Call the server action and pass all necessary data, including user info
       const saveResult = await saveRecipeToDatabase(
         recipeLayout,
         cuisineType,
         cuisineCategory,
         duration,
-        user?.primaryEmailAddress?.emailAddress, // Pass email
-        user?.fullName,                       // Pass full name
-        user?.imageUrl                        // Pass profile image URL
+        user?.primaryEmailAddress?.emailAddress,
+        user?.fullName,                     
+        user?.imageUrl                        
       );
 
       if (saveResult.success) {
         console.log("Recipe saved successfully from server action!");
-        // You might want to display a success message to the user,
-        // or redirect them to a recipe detail page.
-      } else {
-        console.error("Failed to save recipe:", saveResult.message, saveResult.error);
-        // Display an error message to the user
-      }
+        // Access the id from the returned data object
+        const recipeId = saveResult.data?.recipeId; // <--- Get the ID from saveResult.data
 
+        if (recipeId) {
+          router.replace('/create-recipe/' + recipeId); // <--- Use the retrieved ID
+        } else {
+          console.error("Recipe ID was not returned by the server action.");
+          // Handle cases where ID might be missing (e.g., redirect to a generic success page)
+          router.replace('/dashboard'); // Or some other fallback route
+        }
+      } else {
+        console.error("Failed to save recipe:", saveResult.message);
+        // Display an error message to the user, e.g., using a toast notification
+      }
     } catch (err) {
       console.error("Error during recipe generation or save:", err);
-      // Handle AI parsing errors or general save errors
+      // Display a generic error message to the user
     } finally {
-      setLoading(false); // End loading state in both success and error cases
+      setLoading(false);
     }
   };
-
-
-
-  
 
   return (
     <div>
