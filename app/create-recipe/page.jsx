@@ -8,7 +8,8 @@ import SelectCategory from './_components/SelectCategory';
 import SelectOption from './_components/SelectOption';
 import Ingredients from './_components/Ingredients';
 import LoadingDialog from './_components/LoadingDialog';
-
+import {useUser} from '@clerk/nextjs';
+import { saveRecipeToDatabase } from '../../actions';
 const StepperOptions = [
   {
     id: 1,
@@ -31,6 +32,7 @@ function CreateRecipe() {
   const [activeIndex, setActiveIndex] = useState(0);
   const { userRecipeInput } = useContext(UserInputContext);
   const [loading, setLoading] = useState(false);
+  const {user}=useUser();
 
   useEffect(() => {
     console.log(userRecipeInput);
@@ -86,19 +88,48 @@ Ensure the recipe is an authentic ${cuisineType} dish. Do not include any introd
   console.log("Prompt Sent to AI:\n", USER_INPUT_PROMPT);
 
   const result = await GenerateRecipeLayout_AI.sendMessage(USER_INPUT_PROMPT);
-  const responseText = await result.response?.text();
+  const responseText = result.response?.text();
   console.log("Raw Response from AI:\n", responseText);
 
   try {
-    const parsed = JSON.parse(responseText);
-    console.log("Parsed Recipe:\n", parsed);
-  } catch (err) {
-    console.error("Failed to parse JSON response:", err);
-  }
+      const result = await GenerateRecipeLayout_AI.sendMessage(USER_INPUT_PROMPT);
+      const responseText = result.response?.text();
+      console.log("Raw Response from AI:\n", responseText);
 
-  setLoading(false);
-};
+      const recipeLayout = JSON.parse(responseText);
+      console.log("Parsed Recipe:\n", recipeLayout);
 
+      // Call the server action and pass all necessary data, including user info
+      const saveResult = await saveRecipeToDatabase(
+        recipeLayout,
+        cuisineType,
+        cuisineCategory,
+        duration,
+        user?.primaryEmailAddress?.emailAddress, // Pass email
+        user?.fullName,                       // Pass full name
+        user?.imageUrl                        // Pass profile image URL
+      );
+
+      if (saveResult.success) {
+        console.log("Recipe saved successfully from server action!");
+        // You might want to display a success message to the user,
+        // or redirect them to a recipe detail page.
+      } else {
+        console.error("Failed to save recipe:", saveResult.message, saveResult.error);
+        // Display an error message to the user
+      }
+
+    } catch (err) {
+      console.error("Error during recipe generation or save:", err);
+      // Handle AI parsing errors or general save errors
+    } finally {
+      setLoading(false); // End loading state in both success and error cases
+    }
+  };
+
+
+
+  
 
   return (
     <div>
