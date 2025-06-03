@@ -1,6 +1,8 @@
+'use client'
 import { SignIn } from '@clerk/nextjs'
 
 export default function Page() {
+  console.log(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
   return (
     <section className="bg-white dark:bg-gray-900">
       <div className="flex justify-center min-h-screen">

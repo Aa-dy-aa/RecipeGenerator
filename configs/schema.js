@@ -8,6 +8,7 @@ export const RecipeList = pgTable('recipe_list', {
   category: varchar('category').notNull(),
   duration: varchar('duration').notNull(),       
   recipeOutput: json('recipeOutput').notNull(),
+  includeVideo:varchar('includeVideo').notNull().default('Yes'),
   createdBy: varchar('createdBy'),
   userName: varchar('userName'),                
   userProfileImage: varchar('userProfileImage')
