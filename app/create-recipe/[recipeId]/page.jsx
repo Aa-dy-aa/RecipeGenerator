@@ -4,6 +4,7 @@ import { useUser } from '@clerk/nextjs';
 import React, { useEffect, useState, use } from 'react'; // Keep 'use' here
 import { getRecipeByIdAndUser } from '../../actions/actions';
 import RecipeBasicInfo from './_components/RecipeBasicInfo';
+import RecipeDetail from './_components/RecipeDetail';
 
 function RecipeLayout(rawParams) {
   const { user } = useUser();
@@ -32,11 +33,7 @@ function RecipeLayout(rawParams) {
     <div className='mt-10 px-7 md:px-20 lg:px-44'>
       <h1 className='font-bold text-center text-3xl'>Recipe Layout</h1>
       <RecipeBasicInfo recipe={recipe}/>
-      {/* {recipe ? (
-        <pre>{JSON.stringify(recipe, null, 2)}</pre>
-      ) : (
-        <p>Loading or not found.</p>
-      )} */}
+      <RecipeDetail recipe={recipe}/>
     </div>
   );
 }

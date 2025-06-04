@@ -15,7 +15,10 @@ export async function saveRecipeToDatabase(
   duration,
   userEmail,
   userName,
-  userProfileImage
+  userProfileImage,
+  info,
+  serves,
+  caloriesPerServing
 ) {
 
   const finalUserEmail = userEmail || null;
@@ -40,7 +43,10 @@ export async function saveRecipeToDatabase(
     recipeOutput: recipeLayout,
     createdBy: finalUserEmail,
     userName: finalUserName,
-    userProfileImage: finalUserProfileImage
+    userProfileImage: finalUserProfileImage,
+    info:info,
+    serves:serves || 1,
+    caloriesPerServing:caloriesPerServing || 0
   });
 
   console.log("Recipe saved successfully with ID:", id);

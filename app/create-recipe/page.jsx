@@ -71,6 +71,9 @@ Output the result strictly as a JSON object with the following fields:
   "recipeName": string,
   "cuisine": string,
   "cuisineCategory": string,
+  "info": string,
+  "serves": number,
+  "caloriesPerServing": number,
   "ingredients": [
     {
       "name": string,
@@ -85,6 +88,7 @@ Output the result strictly as a JSON object with the following fields:
     ...
   ]
 }
+  Info would include a basic introduction of the recipe in about 50-60 words.
 Ensure the recipe is an authentic ${cuisineType} dish. Do not include any introductory text or notes. Only output the JSON object.
 `;
 
@@ -109,7 +113,10 @@ Ensure the recipe is an authentic ${cuisineType} dish. Do not include any introd
         duration,
         user?.primaryEmailAddress?.emailAddress,
         user?.fullName,                     
-        user?.imageUrl                        
+        user?.imageUrl ,
+        recipeLayout.info,
+        recipeLayout.serves,
+        recipeLayout.caloriesPerServing                      
       );
 
       if (saveResult.success) {
