@@ -4,7 +4,7 @@ import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { and, eq } from 'drizzle-orm';
 import uuid4 from 'uuid4';
-import { RecipeList } from './configs/schema';
+import { RecipeList } from '../../configs/schema';
 console.log('DATABASE_URL in actions.js (for direct init):', process.env.DATABASE_URL);
 const sql = neon(process.env.DATABASE_URL);
 const db = drizzle(sql);
@@ -66,11 +66,5 @@ export async function getRecipeByIdAndUser(recipeId, userEmail) {
       eq(RecipeList.createdBy, userEmail)
     ));
 
-  if (result.length > 0) {
-    console.log('Recipe fetched successfully from DB for ID:', recipeId);
-    return result[0];
-  } else {
-    console.log('No recipe found for ID:', recipeId, 'and user:', userEmail);
-    return null;
-  }
+  return result?.[0] || null;
 }

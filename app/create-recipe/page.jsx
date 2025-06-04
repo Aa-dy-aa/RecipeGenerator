@@ -9,7 +9,7 @@ import SelectOption from './_components/SelectOption';
 import Ingredients from './_components/Ingredients';
 import LoadingDialog from './_components/LoadingDialog';
 import {useUser} from '@clerk/nextjs';
-import { saveRecipeToDatabase } from '../../actions';
+import { saveRecipeToDatabase } from '../actions/actions';
 import {useRouter} from 'next/navigation';
 
 const StepperOptions = [
@@ -114,23 +114,19 @@ Ensure the recipe is an authentic ${cuisineType} dish. Do not include any introd
 
       if (saveResult.success) {
         console.log("Recipe saved successfully from server action!");
-        // Access the id from the returned data object
         const recipeId = saveResult.data?.recipeId; // <--- Get the ID from saveResult.data
 
         if (recipeId) {
-          router.replace('/create-recipe/' + recipeId); // <--- Use the retrieved ID
+          router.replace('/create-recipe/' + recipeId); 
         } else {
           console.error("Recipe ID was not returned by the server action.");
-          // Handle cases where ID might be missing (e.g., redirect to a generic success page)
           router.replace('/dashboard'); // Or some other fallback route
         }
       } else {
         console.error("Failed to save recipe:", saveResult.message);
-        // Display an error message to the user, e.g., using a toast notification
       }
     } catch (err) {
       console.error("Error during recipe generation or save:", err);
-      // Display a generic error message to the user
     } finally {
       setLoading(false);
     }
