@@ -30,7 +30,7 @@ function RecipeLayout(rawParams) {
 
   return (
     <div className='mt-10 px-7 md:px-20 lg:px-44'>
-      <h2 className='font-bold text-center text-2xl'>Recipe Layout</h2>
+      <h1 className='font-bold text-center text-3xl'>Recipe Layout</h1>
       <RecipeBasicInfo recipe={recipe}/>
       {/* {recipe ? (
         <pre>{JSON.stringify(recipe, null, 2)}</pre>
