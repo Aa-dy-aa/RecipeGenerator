@@ -5,6 +5,7 @@ import React, { useEffect, useState, use } from 'react'; // Keep 'use' here
 import { getRecipeByIdAndUser } from '../../actions/actions';
 import RecipeBasicInfo from './_components/RecipeBasicInfo';
 import RecipeDetail from './_components/RecipeDetail';
+import Ingredients from './_components/Ingredients';
 
 function RecipeLayout(rawParams) {
   const { user } = useUser();
@@ -34,6 +35,7 @@ function RecipeLayout(rawParams) {
       <h1 className='font-bold text-center text-3xl'>Recipe Layout</h1>
       <RecipeBasicInfo recipe={recipe}/>
       <RecipeDetail recipe={recipe}/>
+      <Ingredients recipe={recipe}/>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { HiOutlineChartBar,HiOutlineClock,HiOutlineArchive,HiOutlineClipboardLis
 function RecipeDetail({recipe}) {
   return (
     <div className='border p-6 rounded-xl shadow-sm mt-3'>
-        <div className='grid grid-cols-2 md:grid-cols-4'>
+        <div className='grid grid-cols-2 md:grid-cols-4 gap-5'>
             <div className='flex gap-2'>
                 <HiOutlineChartBar style={{ color: '#FF7B74' }} className='text-4xl' />
                 <div>
