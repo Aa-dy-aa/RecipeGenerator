@@ -11,15 +11,12 @@ function RecipeLayout(rawParams) {
   const { user } = useUser();
   const [recipe, setRecipe] = useState(null);
 
-  // --- FIX STARTS HERE ---
-  // Use React.use() to unwrap the params Promise
-  const resolvedParams = use(rawParams.params); // This line is the key change
-  const { recipeId } = resolvedParams || {}; // Access recipeId from the unwrapped object
-  // --- FIX ENDS HERE ---
+  const resolvedParams = use(rawParams.params); 
+  const { recipeId } = resolvedParams || {}; 
 
   useEffect(() => {
     const fetchRecipe = async () => {
-      if (user && recipeId) { // recipeId will now be correctly available
+      if (user && recipeId) { 
         const userEmail = user?.primaryEmailAddress?.emailAddress;
         const result = await getRecipeByIdAndUser(recipeId, userEmail);
         console.log('Fetched recipe:', result); 

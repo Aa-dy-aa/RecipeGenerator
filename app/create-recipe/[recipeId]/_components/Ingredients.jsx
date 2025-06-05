@@ -1,24 +1,21 @@
 import React from 'react';
-import { GrBasket } from "react-icons/gr";
 
 function Ingredients({ recipe }) {
   return (
     <div className='mt-3'>
-      <h2 className='font-medium text-xl'>Ingredients</h2>
-      <div className='mt-2'>
+      <h2 className='text-xl font-semibold mb-2'>Ingredients</h2>
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
         {recipe?.recipeOutput?.ingredients.map((item, index) => (
-            <div className='border p-5 rounded-lg mb-2 flex items-center justify-between'>
-          <div key={index} className='flex gap-5 items-center'>
-            <h2
+          <div key={index} className='flex items-start gap-3 border p-3 rounded-md shadow-sm'>
+            <div
               style={{ backgroundColor: '#FF7B74' }}
-              className='flex-none h-10 w-10 text-white rounded-full text-center p-2'>
+              className='h-8 w-8 text-white rounded-full text-center leading-8 font-semibold'>
               {index + 1}
-            </h2>
+            </div>
             <div>
-                <h2 className='font-medium text-lg'>{item?.name}</h2>
-                <p style={{ color: '#FF7B74' }} className='text-sm text-gray-500 flex gap-2 items-center'><GrBasket />{item?.quantity}{item.unit}</p>
-          </div>
-          </div>
+              <h3 className='font-medium'>{item.name}</h3>
+              <p className='text-sm text-gray-600'>{item.quantity} {item.unit}</p>
+            </div>
           </div>
         ))}
       </div>
