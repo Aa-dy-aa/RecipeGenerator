@@ -1,4 +1,6 @@
-import * as React from 'react';
+'use client'; // make sure this is at the top since it is a client component
+
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,13 +10,40 @@ import Slide from '@mui/material/Slide';
 import { HiMiniPencilSquare } from "react-icons/hi2";
 import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
+import { updateRecipeInDatabase } from '../../../actions/actions'; // correct import
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function EditRecipeBasicInfo() {
-  const [open, setOpen] = React.useState(false);
+function EditRecipeBasicInfo({ recipe }) {
+  const [open, setOpen] = useState(false);
+  const [cuisine, setCuisine] = useState('');
+  const [description, setDescription] = useState('');
+
+  useEffect(() => {
+    if (recipe && recipe.recipeOutput) {
+      setCuisine(recipe.recipeOutput.cuisine ?? '');
+      setDescription(recipe.recipeOutput.description ?? '');
+    }
+  }, [recipe]);
+
+  const onUpdateHandler = async () => {
+    const updatedRecipeOutput = {
+      ...recipe.recipeOutput,
+      cuisine,
+      description,
+    };
+
+    try {
+      await updateRecipeInDatabase(recipe.recipeId, updatedRecipeOutput, description);
+      console.log('Recipe updated successfully.');
+    } catch (error) {
+      console.error('Error updating recipe:', error);
+    }
+
+    handleClose();
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -22,37 +51,45 @@ function EditRecipeBasicInfo() {
 
   const handleClose = () => {
     setOpen(false);
-  }; 
+  };
 
   return (
     <React.Fragment>
       <Button onClick={handleClickOpen} style={{ color: '#36454F' }}>
-        <HiMiniPencilSquare size={24}/>
+        <HiMiniPencilSquare size={24} />
       </Button>
       <Dialog
         open={open}
         slots={{
           transition: Transition,
-        }} 
+        }}
         keepMounted
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{" Edit Recipe Cuisine or Description"}</DialogTitle>
+        <DialogTitle>{"Edit Recipe Cuisine or Description"}</DialogTitle>
         <DialogContent>
-          <DialogContent id="alert-dialog-slide-description">
-                <div className='mt-3'>
-                    <label>Recipe Cuisine</label>
-                    <Input/>
-                </div>
-                <div>
-                    <label>Descriptions</label>
-                    <TextField/>
-                </div>
-          </DialogContent>
+          <div className='mt-3'>
+            <label>Recipe Cuisine</label>
+            <Input
+              value={cuisine}
+              onChange={(event) => setCuisine(event.target.value)}
+              fullWidth
+            />
+          </div>
+          <div className='mt-3'>
+            <label>Description</label>
+            <TextField
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              multiline
+              rows={4}
+              fullWidth
+            />
+          </div>
         </DialogContent>
-        <DialogActions>  
-                <Button>Update</Button>
+        <DialogActions>
+          <Button onClick={onUpdateHandler}>Update</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>
@@ -60,4 +97,3 @@ function EditRecipeBasicInfo() {
 }
 
 export default EditRecipeBasicInfo;
-

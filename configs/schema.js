@@ -14,5 +14,6 @@ export const RecipeList = pgTable('recipe_list', {
   userProfileImage: varchar('userProfileImage'),
   info:varchar('info').notNull(),
   serves:integer('serves').notNull(),
-  caloriesPerServing:integer('calories').notNull()        
+  caloriesPerServing:integer('calories').notNull(),
+  description:varchar('description')    
 });

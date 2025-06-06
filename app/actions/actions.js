@@ -18,7 +18,8 @@ export async function saveRecipeToDatabase(
   userProfileImage,
   info,
   serves,
-  caloriesPerServing
+  caloriesPerServing,
+  description
 ) {
 
   const finalUserEmail = userEmail || null;
@@ -46,7 +47,8 @@ export async function saveRecipeToDatabase(
     userProfileImage: finalUserProfileImage,
     info:info,
     serves:serves || 1,
-    caloriesPerServing:caloriesPerServing || 0
+    caloriesPerServing:caloriesPerServing || 0,
+    description:description
   });
 
   console.log("Recipe saved successfully with ID:", id);
@@ -73,4 +75,19 @@ export async function getRecipeByIdAndUser(recipeId, userEmail) {
     ));
 
   return result?.[0] || null;
+}
+export async function updateRecipeInDatabase(recipeId, updatedRecipeOutput, updatedDescription) {
+  console.log('Updating recipe:', recipeId);
+
+  const result = await db.update(RecipeList)
+    .set({
+      recipeOutput: updatedRecipeOutput,
+      description: updatedDescription
+    })
+    .where(eq(RecipeList.recipeId, recipeId))
+    .returning({ id: RecipeList.id });
+
+  console.log('Update result:', result);
+
+  return result;
 }

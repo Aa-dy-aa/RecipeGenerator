@@ -58,6 +58,7 @@ function CreateRecipe() {
   const cuisineCategory = userRecipeInput?.category; // e.g., veg, non veg, dessert
   const ingredients = userRecipeInput?.topic;
   const duration = userRecipeInput?.duration;
+  const description= userRecipeInput?.description;
 
   const USER_INPUT_PROMPT = `
 Generate a detailed recipe using the following constraints:
@@ -65,6 +66,7 @@ Generate a detailed recipe using the following constraints:
 - Cuisine Category (e.g. veg, non veg, dessert, vegan): "${cuisineCategory}"
 - Ingredients (with quantity): "${ingredients}"
 - Preparation Duration: "${duration}"
+- Preparation Description: "${description}"
 
 Output the result strictly as a JSON object with the following fields:
 {
@@ -74,6 +76,7 @@ Output the result strictly as a JSON object with the following fields:
   "info": string,
   "serves": number,
   "caloriesPerServing": number,
+  "description":description,
   "ingredients": [
     {
       "name": string,
@@ -93,11 +96,6 @@ Ensure the recipe is an authentic ${cuisineType} dish. Do not include any introd
 `;
 
   console.log("Prompt Sent to AI:\n", USER_INPUT_PROMPT);
-
-  const result = await GenerateRecipeLayout_AI.sendMessage(USER_INPUT_PROMPT);
-  const responseText = result.response?.text();
-  console.log("Raw Response from AI:\n", responseText);
-
   try {
       const result = await GenerateRecipeLayout_AI.sendMessage(USER_INPUT_PROMPT);
       const responseText = result.response?.text();
@@ -116,7 +114,8 @@ Ensure the recipe is an authentic ${cuisineType} dish. Do not include any introd
         user?.imageUrl ,
         recipeLayout.info,
         recipeLayout.serves,
-        recipeLayout.caloriesPerServing                      
+        recipeLayout.caloriesPerServing,
+        description                     
       );
 
       if (saveResult.success) {
