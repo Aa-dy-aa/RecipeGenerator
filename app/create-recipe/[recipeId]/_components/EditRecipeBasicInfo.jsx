@@ -1,4 +1,4 @@
-'use client'; // make sure this is at the top since it is a client component
+'use client'; 
 
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
@@ -10,20 +10,22 @@ import Slide from '@mui/material/Slide';
 import { HiMiniPencilSquare } from "react-icons/hi2";
 import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
-import { updateRecipeInDatabase } from '../../../actions/actions'; // correct import
+import { updateRecipeInDatabase } from '../../../actions/actions'; 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function EditRecipeBasicInfo({ recipe }) {
+function EditRecipeBasicInfo({ recipe, refreshData }) {
   const [open, setOpen] = useState(false);
   const [cuisine, setCuisine] = useState('');
+  const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
 
   useEffect(() => {
     if (recipe && recipe.recipeOutput) {
       setCuisine(recipe.recipeOutput.cuisine ?? '');
+      setCategory(recipe.recipeOutput.cuisineCategory ?? '');
       setDescription(recipe.recipeOutput.description ?? '');
     }
   }, [recipe]);
@@ -32,17 +34,28 @@ function EditRecipeBasicInfo({ recipe }) {
     const updatedRecipeOutput = {
       ...recipe.recipeOutput,
       cuisine,
+      cuisineCategory: cuisine, // Set cuisineCategory to same as cuisine
       description,
     };
 
     try {
-      await updateRecipeInDatabase(recipe.recipeId, updatedRecipeOutput, description);
+      await updateRecipeInDatabase(
+        recipe.recipeId,
+        updatedRecipeOutput,
+        cuisine, // for main table "cuisine"
+        description // for main table "description"
+      );
       console.log('Recipe updated successfully.');
+
+      // Close dialog
+      setOpen(false);
+
+      // Refresh data AFTER closing the dialog
+      refreshData();
+
     } catch (error) {
       console.error('Error updating recipe:', error);
     }
-
-    handleClose();
   };
 
   const handleClickOpen = () => {

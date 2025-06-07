@@ -76,18 +76,17 @@ export async function getRecipeByIdAndUser(recipeId, userEmail) {
 
   return result?.[0] || null;
 }
-export async function updateRecipeInDatabase(recipeId, updatedRecipeOutput, updatedDescription) {
+export async function updateRecipeInDatabase(recipeId, updatedRecipeOutput, updatedCategory, updatedDescription) {
   console.log('Updating recipe:', recipeId);
 
   const result = await db.update(RecipeList)
     .set({
       recipeOutput: updatedRecipeOutput,
+      category: updatedCategory,
       description: updatedDescription
     })
     .where(eq(RecipeList.recipeId, recipeId))
     .returning({ id: RecipeList.id });
-
-  console.log('Update result:', result);
 
   return result;
 }
