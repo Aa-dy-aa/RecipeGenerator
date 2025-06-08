@@ -10,7 +10,7 @@ import Slide from '@mui/material/Slide';
 import { HiMiniPencilSquare } from "react-icons/hi2";
 import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
-import { updateRecipeInDatabase } from '../../../actions/actions'; 
+import { updateRecipeInDatabase, generateRecipeOutput } from '../../../actions/actions'; 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -31,31 +31,41 @@ function EditRecipeBasicInfo({ recipe, refreshData }) {
   }, [recipe]);
 
   const onUpdateHandler = async () => {
-    const updatedRecipeOutput = {
-      ...recipe.recipeOutput,
-      cuisine,
-      cuisineCategory: cuisine, // Set cuisineCategory to same as cuisine
-      description,
-    };
+    let updatedRecipeOutput = { ...recipe.recipeOutput };
 
     try {
-      await updateRecipeInDatabase(
-        recipe.recipeId,
-        updatedRecipeOutput,
-        cuisine, // for main table "cuisine"
-        description // for main table "description"
-      );
+      // If cuisine has changed, generate new recipe output
+      if (cuisine !== recipe.recipeOutput.cuisine) {
+        console.log('Cuisine changed, generating new recipe...');
+        const newRecipeOutput = await generateRecipeOutput(cuisine);
+
+        updatedRecipeOutput = {
+          ...newRecipeOutput,
+          cuisine,
+          cuisineCategory: cuisine,
+        };
+
+      } else {
+        // If only description is changed, update description
+        updatedRecipeOutput = {
+          ...recipe.recipeOutput,
+          cuisine,
+          cuisineCategory: cuisine,
+          description,
+        };
+      }
+
+      await updateRecipeInDatabase(recipe.recipeId, updatedRecipeOutput, cuisine, description);
       console.log('Recipe updated successfully.');
 
-      // Close dialog
-      setOpen(false);
-
-      // Refresh data AFTER closing the dialog
-      refreshData();
+      // Refresh full recipe data
+      await refreshData();
 
     } catch (error) {
       console.error('Error updating recipe:', error);
     }
+
+    handleClose();
   };
 
   const handleClickOpen = () => {
@@ -110,3 +120,4 @@ function EditRecipeBasicInfo({ recipe, refreshData }) {
 }
 
 export default EditRecipeBasicInfo;
+

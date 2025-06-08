@@ -5,6 +5,8 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { and, eq } from 'drizzle-orm';
 import uuid4 from 'uuid4';
 import { RecipeList } from '../../configs/schema';
+import { GenerateRecipeLayout_AI } from '../../configs/AiModel';  // You already used it in page.jsx
+
 console.log('DATABASE_URL in actions.js (for direct init):', process.env.DATABASE_URL);
 const sql = neon(process.env.DATABASE_URL);
 const db = drizzle(sql);
@@ -89,4 +91,54 @@ export async function updateRecipeInDatabase(recipeId, updatedRecipeOutput, upda
     .returning({ id: RecipeList.id });
 
   return result;
+}
+export async function generateRecipeOutput(cuisine) {
+  console.log("Calling AI to generate recipe for cuisine:", cuisine);
+
+  const USER_INPUT_PROMPT = `
+Generate a detailed recipe using the following constraints:
+- Cuisine Type (e.g. Indian, Italian, Mexican): "${cuisine}"
+
+Output the result strictly as a JSON object with the following fields:
+{
+  "recipeName": string,
+  "cuisine": string,
+  "cuisineCategory": string,
+  "info": string,
+  "serves": number,
+  "caloriesPerServing": number,
+  "description": string,
+  "ingredients": [
+    {
+      "name": string,
+      "quantity": string,
+      "unit": string
+    }
+  ],
+  "totalDuration": string,
+  "steps": [
+    "Step 1 instruction...",
+    "Step 2 instruction...",
+    ...
+  ]
+}
+
+Info would include a basic introduction of the recipe in about 50-60 words.
+Ensure the recipe is an authentic ${cuisine} dish. Do not include any introductory text or notes. Only output the JSON object.
+`;
+
+  try {
+    // Use your same AI model here:
+    const result = await GenerateRecipeLayout_AI.sendMessage(USER_INPUT_PROMPT);
+
+    const responseText = result.response?.text();
+    console.log("Raw AI Response:", responseText);
+
+    const recipeLayout = JSON.parse(responseText);
+    return recipeLayout;
+    
+  } catch (error) {
+    console.error("Error generating recipe output:", error);
+    throw error;
+  }
 }
