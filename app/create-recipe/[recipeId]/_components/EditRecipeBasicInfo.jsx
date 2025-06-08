@@ -7,8 +7,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import CuisineOptions from '../../../_shared/CategoryList';
 import { HiMiniPencilSquare } from "react-icons/hi2";
-import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
 import { updateRecipeInDatabase, generateRecipeOutput } from '../../../actions/actions'; 
 
@@ -93,13 +95,19 @@ function EditRecipeBasicInfo({ recipe, refreshData }) {
         <DialogTitle>{"Edit Recipe Cuisine or Description"}</DialogTitle>
         <DialogContent>
           <div className='mt-3'>
-            <label>Recipe Cuisine</label>
-            <Input
-              value={cuisine}
-              onChange={(event) => setCuisine(event.target.value)}
-              fullWidth
-            />
-          </div>
+  <label>Recipe Cuisine</label>
+  <Select
+    value={cuisine}
+    onChange={(event) => setCuisine(event.target.value)}
+    fullWidth
+  >
+    {CuisineOptions.map((option) => (
+      <MenuItem key={option.id} value={option.name}>
+        {option.name}
+      </MenuItem>
+    ))}
+  </Select>
+</div>
           <div className='mt-3'>
             <label>Description</label>
             <TextField
