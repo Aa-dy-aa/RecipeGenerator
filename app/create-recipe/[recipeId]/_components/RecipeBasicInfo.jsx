@@ -4,7 +4,7 @@ import { HiOutlinePuzzle } from "react-icons/hi";
 import { Button } from '../../../../components/ui/button';
 import EditRecipeBasicInfo from './EditRecipeBasicInfo'; 
 
-function RecipeBasicInfo({recipe,refreshData}) {
+function RecipeBasicInfo({ recipe, refreshData, generateRecipe }) {
   const [animationData, setAnimationData] = useState(null);
    useEffect(() => {
     fetch('/placeholder.json') 
@@ -19,7 +19,13 @@ function RecipeBasicInfo({recipe,refreshData}) {
                   <EditRecipeBasicInfo recipe={recipe} refreshData={()=>refreshData(true)}/></h2>
                 <p className='text-xs text-gray-400 mt-3'>{recipe?.recipeOutput?.info}</p>
                 <h2 style={{ color: '#FF7B74' }} className='font-medium mt-2 flex gap-2 items-center'><HiOutlinePuzzle />{recipe?.category}</h2>
-                <Button style={{ backgroundColor: '#FF7B74' }} className='w-full mt-5'>Let's Cook!</Button>
+                <Button 
+  onClick={generateRecipe} 
+  style={{ backgroundColor: '#FF7B74' }} 
+  className='w-full mt-5'
+>
+  Let's Cook!
+</Button>
             </div>
             <div>
                {animationData && (

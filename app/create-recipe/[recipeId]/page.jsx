@@ -9,7 +9,7 @@ import Ingredients from './_components/Ingredients';
 import { Button } from '../../../components/ui/button';
 import service from '../../../configs/service'
 import {useRouter} from 'next/navigation'
-import { saveRecipeToDatabase } from '../../actions/actions';
+import { saveVideoDataToDB } from '../../actions/actions';
 
 function RecipeLayout(rawParams) {
   const { user } = useUser();
@@ -38,24 +38,17 @@ const GenerateRecipe = async () => {
       const videoResp = await service.getVideos(`${recipe?.name}: ${recipe.recipeOutput.steps.join(' ')}`);
       const videoId = videoResp[0]?.id?.videoId || '';
 
-      const response = await saveRecipeToDatabase(
+      // Save only to Recipe table
+      const result = await saveVideoDataToDB(
+        recipe.recipeId,
         recipe.recipeOutput,
-        recipe.recipeOutput.cuisine,
-        recipe.recipeOutput.cuisineCategory,
-        recipe.recipeOutput.totalDuration,
-        user?.primaryEmailAddress?.emailAddress,
-        user?.fullName,
-        user?.imageUrl,
-        recipe.recipeOutput.info,
-        recipe.recipeOutput.serves,
-        recipe.recipeOutput.caloriesPerServing,
-        recipe.recipeOutput.description,
-        videoId 
+        videoId
       );
-      if (response.success) {
-        router.replace(`/create-recipe/${response.data.recipeId}/finish`);
+
+      if (result.success) {
+        router.replace(`/create-recipe/${recipe.recipeId}/finish`);
       } else {
-        console.error("Failed to save recipe:", response.message);
+        console.error("Failed to save video data:", result.error);
       }
 
     } catch (error) {
@@ -67,13 +60,18 @@ const GenerateRecipe = async () => {
   }
 };
 
+
   return (
     <div className='mt-10 px-7 md:px-20 lg:px-44'>
       <h1 className='font-bold text-center text-3xl'>Recipe Layout</h1>
-      <RecipeBasicInfo recipe={recipe} refreshData={fetchRecipe} />
+      <RecipeBasicInfo
+  recipe={recipe}
+  refreshData={fetchRecipe}
+  generateRecipe={GenerateRecipe} 
+/>
       <RecipeDetail recipe={recipe} />
       <Ingredients recipe={recipe} />
-      <Button onClick={GenerateRecipe} style={{ color: '#36454F' }} className="my-10">Generate Recipe</Button>
+      <Button onClick={GenerateRecipe} style={{ backgroundColor: '#FF7B74' }} className="my-10">Generate Recipe</Button>
     </div>
   );
 }

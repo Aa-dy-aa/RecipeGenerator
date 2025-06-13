@@ -5,6 +5,7 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { and, eq } from 'drizzle-orm';
 import uuid4 from 'uuid4';
 import { RecipeList } from '../../configs/schema';
+import { Recipes } from '../../configs/schema';
 import { GenerateRecipeLayout_AI } from '../../configs/AiModel';  // You already used it in page.jsx
 
 console.log('DATABASE_URL in actions.js (for direct init):', process.env.DATABASE_URL);
@@ -140,5 +141,21 @@ Ensure the recipe is an authentic ${cuisine} dish. Do not include any introducto
   } catch (error) {
     console.error("Error generating recipe output:", error);
     throw error;
+  }
+}
+
+export async function saveVideoDataToDB(recipeId, content, videoId) {
+  try {
+    await db.insert(Recipes).values({
+      recipeId: recipeId,
+      content: content,
+      videoId: videoId,
+    });
+
+    console.log("Video data saved successfully!");
+    return { success: true };
+  } catch (err) {
+    console.error("Error saving video data:", err);
+    return { success: false, error: err.message };
   }
 }
