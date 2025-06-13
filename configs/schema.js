@@ -17,3 +17,10 @@ export const RecipeList = pgTable('recipe_list', {
   caloriesPerServing:integer('calories').notNull(),
   description:varchar('description')    
 });
+
+export const Recipes=pgTable('recipes',{
+  id:serial('id').primaryKey(),
+  recipeId:varchar('recipeId').notNull(),
+  content:json('content').notNull(),
+  videoId:varchar('videoId').notNull()
+})

@@ -1,4 +1,4 @@
-'use server'; // This directive makes all exports in this file server actions
+'use server';
 
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';

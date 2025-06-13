@@ -7,10 +7,14 @@ import RecipeBasicInfo from './_components/RecipeBasicInfo';
 import RecipeDetail from './_components/RecipeDetail';
 import Ingredients from './_components/Ingredients';
 import { Button } from '../../../components/ui/button';
+import service from '../../../configs/service'
+import {useRouter} from 'next/navigation'
+import { saveRecipeToDatabase } from '../../actions/actions';
 
 function RecipeLayout(rawParams) {
   const { user } = useUser();
   const [recipe, setRecipe] = useState(null);
+  const router=useRouter();
 
   const resolvedParams = use(rawParams.params); 
   const { recipeId } = resolvedParams || {}; 
@@ -28,10 +32,36 @@ function RecipeLayout(rawParams) {
     fetchRecipe();
   }, [user, recipeId]);
 
-const GenerateRecipe = () => {
-  if (recipe && recipe.recipeOutput && recipe.recipeOutput.steps) {
-    console.log('Recipe Steps:', recipe.recipeOutput.steps);
-    // If you want to display them on screen, you can also set state and render
+const GenerateRecipe = async () => {
+  if (recipe?.recipeOutput?.steps?.length) {
+    try {
+      const videoResp = await service.getVideos(`${recipe?.name}: ${recipe.recipeOutput.steps.join(' ')}`);
+      const videoId = videoResp[0]?.id?.videoId || '';
+
+      const response = await saveRecipeToDatabase(
+        recipe.recipeOutput,
+        recipe.recipeOutput.cuisine,
+        recipe.recipeOutput.cuisineCategory,
+        recipe.recipeOutput.totalDuration,
+        user?.primaryEmailAddress?.emailAddress,
+        user?.fullName,
+        user?.imageUrl,
+        recipe.recipeOutput.info,
+        recipe.recipeOutput.serves,
+        recipe.recipeOutput.caloriesPerServing,
+        recipe.recipeOutput.description,
+        videoId 
+      );
+      if (response.success) {
+        router.replace(`/create-recipe/${response.data.recipeId}/finish`);
+      } else {
+        console.error("Failed to save recipe:", response.message);
+      }
+
+    } catch (error) {
+      console.error("Error in GenerateRecipe:", error);
+    }
+
   } else {
     console.log('No steps available in recipe.');
   }
