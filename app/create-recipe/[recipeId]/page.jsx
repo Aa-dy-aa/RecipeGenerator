@@ -37,8 +37,6 @@ const GenerateRecipe = async () => {
     try {
       const videoResp = await service.getVideos(`${recipe?.name}: ${recipe.recipeOutput.steps.join(' ')}`);
       const videoId = videoResp[0]?.id?.videoId || '';
-
-      // Save only to Recipe table
       const result = await saveVideoDataToDB(
         recipe.recipeId,
         recipe.recipeOutput,
@@ -58,6 +56,7 @@ const GenerateRecipe = async () => {
   } else {
     console.log('No steps available in recipe.');
   }
+  
 };
 
 

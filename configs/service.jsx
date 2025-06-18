@@ -7,7 +7,8 @@ const getVideos = async (query) => {
   const params = {
     part: 'snippet',
     q: query,
-    maxResults: 1, // typo fixed from "maxResult"
+    maxResults: 1, 
+    type:'video',
     key: API_KEY,
   };
 
