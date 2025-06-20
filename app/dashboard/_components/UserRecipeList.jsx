@@ -1,25 +1,19 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useUser } from '@clerk/nextjs';
 import RecipeCard from '../_components/RecipeCard';
-import { getUserRecipes } from '../../actions/getUserRecipes';
+import { getUserSavedRecipes } from '../../actions/getUserRecipes';
 
 function UserRecipeList() {
   const [recipeList, setRecipeList] = useState([]);
-  const { user } = useUser();
 
   useEffect(() => {
     const fetchRecipes = async () => {
-      if (user) {
-        const email = user?.primaryEmailAddress?.emailAddress;
-        const recipes = await getUserRecipes(email); 
-        setRecipeList(recipes);
-      }
+      const recipes = await getUserSavedRecipes();
+      setRecipeList(recipes);
     };
-
     fetchRecipes();
-  }, [user]);
+  }, []);
 
   return (
     <div className='mt-10'>

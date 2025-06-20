@@ -6,7 +6,8 @@ import { and, eq } from 'drizzle-orm';
 import uuid4 from 'uuid4';
 import { RecipeList } from '../../configs/schema';
 import { Recipes } from '../../configs/schema';
-import { GenerateRecipeLayout_AI } from '../../configs/AiModel';  // You already used it in page.jsx
+import { GenerateRecipeLayout_AI } from '../../configs/AiModel';  
+import { getRecipeImageUrl } from './getRecipeImage'; 
 
 console.log('DATABASE_URL in actions.js (for direct init):', process.env.DATABASE_URL);
 const sql = neon(process.env.DATABASE_URL);
@@ -146,10 +147,15 @@ Ensure the recipe is an authentic ${cuisine} dish. Do not include any introducto
 
 export async function saveVideoDataToDB(recipeId, content, videoId) {
   try {
+    // ✅ Get image URL using recipeName
+    const recipeName = content?.recipeName || "food"; // fallback if name missing
+    const imageUrl = await getRecipeImageUrl(recipeName);
+
     await db.insert(Recipes).values({
       recipeId: recipeId,
       content: content,
       videoId: videoId,
+      recipeBanner: imageUrl // ✅ Save it here
     });
 
     console.log("Video data saved successfully!");

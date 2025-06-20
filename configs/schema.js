@@ -1,4 +1,4 @@
-import { pgTable, varchar, serial, json,integer } from 'drizzle-orm/pg-core';
+import { pgTable, varchar, serial, json,integer,text,timestamp} from 'drizzle-orm/pg-core';
 
 export const RecipeList = pgTable('recipe_list', {
   id: serial('id').primaryKey(),
@@ -22,5 +22,7 @@ export const Recipes=pgTable('recipes',{
   id:serial('id').primaryKey(),
   recipeId:varchar('recipeId').notNull(),
   content:json('content').notNull(),
-  videoId:varchar('videoId').notNull()
+  videoId:varchar('videoId').notNull(),
+  recipeBanner: text("recipe_banner"), 
+  createdAt: timestamp("created_at").defaultNow()
 })
