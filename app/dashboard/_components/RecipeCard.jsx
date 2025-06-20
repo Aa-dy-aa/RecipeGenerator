@@ -7,6 +7,11 @@ function RecipeCard({ recipe }) {
   const generatedFallbackBanner = getRecipeImageUrl(recipe?.content?.recipeName);
   const imageUrl = recipe?.recipeBanner || generatedFallbackBanner;
   const finalImageSrc = (imageUrl && imageUrl !== '') ? imageUrl : null;
+  const handleOnDelete=async()=>{
+    const resp=await db.delete(RecipeList)
+    .where(eq(RecipeList.id,recipe?.id))
+    .returning({id:RecipeList?.id})
+  }
   console.log("recipeBanner:", recipe?.recipeBanner);
 console.log("finalImageSrc:", finalImageSrc);
 
