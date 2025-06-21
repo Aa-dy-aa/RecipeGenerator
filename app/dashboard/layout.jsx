@@ -1,10 +1,13 @@
 "use client";
-import React from 'react'
+import React,{useState} from 'react'
 import Header from './_components/Header'
 import SideBar from './_components/SideBar'
+import {UserRecipeListContext} from '../_context/UserRecipeListContext'
 
 function DashboardLayout({children}) {
+  const [userRecipeList,setUserRecipeList]=useState([]);
   return (
+    <UserRecipeListContext.Provider value={{userRecipeList,setUserRecipeList}}>
     <div>
         <div className='md:w-64 hidden md:block'>
             <SideBar/>
@@ -16,6 +19,7 @@ function DashboardLayout({children}) {
           </div>
         </div>
     </div>
+    </UserRecipeListContext.Provider>
   )
 }
 

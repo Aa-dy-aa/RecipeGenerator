@@ -1,7 +1,6 @@
 'use server';
-
-import { db } from '../../configs/db'; // adjust as needed
-import { Recipes } from '../../configs/schema'; // your drizzle schema
+import { db } from '../../configs/db'; 
+import { Recipes } from '../../configs/schema'; 
 import { eq } from 'drizzle-orm';
 
 export async function deleteRecipeById(id) {

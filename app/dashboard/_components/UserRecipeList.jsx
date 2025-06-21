@@ -1,17 +1,20 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import RecipeCard from '../_components/RecipeCard';
 import { getUserSavedRecipes } from '../../actions/getUserRecipes';
 import { deleteRecipeById } from '../../actions/deleteRecipe';
+import { UserRecipeListContext } from '../../_context/UserRecipeListContext'; 
 
 function UserRecipeList() {
   const [recipeList, setRecipeList] = useState([]);
+  const { userRecipeList, setUserRecipeList } = useContext(UserRecipeListContext);
 
   useEffect(() => {
     const fetchRecipes = async () => {
       const recipes = await getUserSavedRecipes();
       setRecipeList(recipes);
+      setUserRecipeList(recipes);
     };
     fetchRecipes();
   }, []);
@@ -19,8 +22,8 @@ function UserRecipeList() {
   const handleDelete = async (recipeId) => {
     try {
       await deleteRecipeById(recipeId);
-      // remove the recipe from the UI
       setRecipeList((prev) => prev.filter((r) => r.id !== recipeId));
+      setUserRecipeList((prev) => prev.filter((r) => r.id !== recipeId));
     } catch (error) {
       console.error('Failed to delete recipe:', error);
     }

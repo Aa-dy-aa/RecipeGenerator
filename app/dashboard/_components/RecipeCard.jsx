@@ -1,20 +1,27 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { HiEllipsisVertical, HiOutlineClipboardDocumentCheck } from "react-icons/hi2";
 import DropdownOption from '../_components/DropdownOption';
 import { getRecipeImageUrl } from '../../actions/getRecipeImage';
 
 function RecipeCard({ recipe,onDelete }) {
-  const generatedFallbackBanner = getRecipeImageUrl(recipe?.content?.recipeName);
-  const imageUrl = recipe?.recipeBanner || generatedFallbackBanner;
-  const finalImageSrc = (imageUrl && imageUrl !== '') ? imageUrl : null;
+  const [fallbackImageUrl,setFallbackImageUrl]=useState(null);
+ 
+  useEffect(()=>{
+    async function fetchImage(){
+      const imageUrl=await getRecipeImageUrl(recipe?.content?.recipeName);
+      setFallbackImageUrl(imageUrl);
+    }
+    if(!recipe?.recipeBanner){
+      fetchImage();
+    }
+  },[recipe?.content?.recipeName,recipe?.recipeBanner]);
+  const finalImageSrc=recipe?.recipeBanner || fallbackImageUrl;
+  
   const handleOnDelete=async()=>{
     const resp=await db.delete(RecipeList)
     .where(eq(RecipeList.id,recipe?.id))
     .returning({id:RecipeList?.id})
   }
-  console.log("recipeBanner:", recipe?.recipeBanner);
-console.log("finalImageSrc:", finalImageSrc);
-
 
   return (
     <div className='shadow-sm rounded-lg border p-2 cursor-pointer mt-4 hover:border-[#E45C55]'>
