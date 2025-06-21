@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import RecipeCard from '../_components/RecipeCard';
 import { getUserSavedRecipes } from '../../actions/getUserRecipes';
+import { deleteRecipeById } from '../../actions/deleteRecipe';
 
 function UserRecipeList() {
   const [recipeList, setRecipeList] = useState([]);
@@ -15,12 +16,26 @@ function UserRecipeList() {
     fetchRecipes();
   }, []);
 
+  const handleDelete = async (recipeId) => {
+    try {
+      await deleteRecipeById(recipeId);
+      // remove the recipe from the UI
+      setRecipeList((prev) => prev.filter((r) => r.id !== recipeId));
+    } catch (error) {
+      console.error('Failed to delete recipe:', error);
+    }
+  };
+
   return (
     <div className='mt-10'>
       <h2 className='font-medium text-xl'>My AI Recipes</h2>
       <div className='grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5'>
-        {recipeList.map((recipe, index) => (
-          <RecipeCard recipe={recipe} key={index} refreshData={()=>getUserSavedRecipes()}/>
+        {recipeList.map((recipe) => (
+          <RecipeCard
+            recipe={recipe}
+            key={recipe.id}
+            onDelete={handleDelete}
+          />
         ))}
       </div>
     </div>

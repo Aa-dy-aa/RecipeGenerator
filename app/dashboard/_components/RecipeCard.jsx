@@ -3,7 +3,7 @@ import { HiEllipsisVertical, HiOutlineClipboardDocumentCheck } from "react-icons
 import DropdownOption from '../_components/DropdownOption';
 import { getRecipeImageUrl } from '../../actions/getRecipeImage';
 
-function RecipeCard({ recipe }) {
+function RecipeCard({ recipe,onDelete }) {
   const generatedFallbackBanner = getRecipeImageUrl(recipe?.content?.recipeName);
   const imageUrl = recipe?.recipeBanner || generatedFallbackBanner;
   const finalImageSrc = (imageUrl && imageUrl !== '') ? imageUrl : null;
@@ -35,7 +35,7 @@ console.log("finalImageSrc:", finalImageSrc);
       <div className='p-2'>
         <h2 className='font-medium text-lg flex justify-between items-center'>
           {recipe?.content?.recipeName || 'Untitled Recipe'}
-          <DropdownOption handleOnDelete={()=>handleOnDelete()}>
+          <DropdownOption handleOnDelete={()=>onDelete(recipe.id)}>
             <HiEllipsisVertical />
           </DropdownOption>
         </h2>

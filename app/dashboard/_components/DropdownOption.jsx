@@ -52,7 +52,7 @@ function DropdownOption({ children, handleOnDelete}) {
             tabIndex="-1"
             id="menu-item-0"
             onClick={() => {
-              {handleOnDelete}
+              handleOnDelete()
               setIsOpen(false);
             }}
           >
