@@ -13,6 +13,7 @@ function UserRecipeList() {
   useEffect(() => {
     const fetchRecipes = async () => {
       const recipes = await getUserSavedRecipes();
+      console.log("Recipes fetched in UserRecipeList:", recipes);
       setRecipeList(recipes);
       setUserRecipeList(recipes);
     };
@@ -37,6 +38,7 @@ function UserRecipeList() {
           <RecipeCard
             recipe={recipe}
             key={recipe.id}
+            
             onDelete={handleDelete}
           />
         ))}

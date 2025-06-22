@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react';
 import { HiEllipsisVertical, HiOutlineClipboardDocumentCheck } from "react-icons/hi2";
 import DropdownOption from '../_components/DropdownOption';
 import { getRecipeImageUrl } from '../../actions/getRecipeImage';
+import Link from 'next/link';
 
 function RecipeCard({ recipe,onDelete }) {
   const [fallbackImageUrl,setFallbackImageUrl]=useState(null);
@@ -25,6 +26,7 @@ function RecipeCard({ recipe,onDelete }) {
 
   return (
     <div className='shadow-sm rounded-lg border p-2 cursor-pointer mt-4 hover:border-[#E45C55]'>
+      <Link href={'/recipe/'+recipe?.recipeId}>
       {finalImageSrc ? (
         <img
           src={finalImageSrc}
@@ -38,6 +40,7 @@ function RecipeCard({ recipe,onDelete }) {
           No Image Available
         </div>
       )}
+      </Link>
       
       <div className='p-2'>
         <h2 className='font-medium text-lg flex justify-between items-center'>

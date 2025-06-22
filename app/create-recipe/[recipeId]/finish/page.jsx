@@ -3,16 +3,24 @@
 import { useEffect, useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { getRecipeByIdAndUser } from '../../../actions/actions'; 
+import { useSearchParams } from 'next/navigation'; // Import useSearchParams
 
-export default function FinishScreen({ recipeId }) { 
+export default function FinishScreen() { 
+  // 1. Get search parameters from the URL
+  const searchParams = useSearchParams(); 
+  // 2. Extract the 'recipeId' query parameter
+  const recipeId = searchParams.get('recipeId'); 
+
   const { user, isLoaded } = useUser();
   const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
-    console.log("Checking inputs — recipeId:", recipeId, "user:", user, "isLoaded:", isLoaded);
+    // This log will now show the recipeId from the URL query
+    console.log("Checking inputs — recipeId (from URL query):", recipeId, "user:", user, "isLoaded:", isLoaded);
 
     const fetchRecipe = async () => {
-      if (isLoaded && user && recipeId) {
+      // The fetch will now proceed if recipeId is present in the URL query
+      if (isLoaded && user && recipeId) { 
         const userEmail = user?.primaryEmailAddress?.emailAddress;
         
         if (userEmail) {
@@ -32,7 +40,7 @@ export default function FinishScreen({ recipeId }) {
     };
 
     fetchRecipe();
-  }, [user, recipeId, isLoaded]); 
+  }, [user, recipeId, isLoaded]); // Dependencies remain correct
 
   console.log("Render → user:", user);
   console.log("Render → recipe:", recipe);
