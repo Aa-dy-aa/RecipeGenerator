@@ -6,20 +6,16 @@ import { getRecipeByIdAndUser } from '../../../actions/actions';
 import { useSearchParams } from 'next/navigation'; // Import useSearchParams
 
 export default function FinishScreen() { 
-  // 1. Get search parameters from the URL
   const searchParams = useSearchParams(); 
-  // 2. Extract the 'recipeId' query parameter
   const recipeId = searchParams.get('recipeId'); 
 
   const { user, isLoaded } = useUser();
   const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
-    // This log will now show the recipeId from the URL query
     console.log("Checking inputs — recipeId (from URL query):", recipeId, "user:", user, "isLoaded:", isLoaded);
 
     const fetchRecipe = async () => {
-      // The fetch will now proceed if recipeId is present in the URL query
       if (isLoaded && user && recipeId) { 
         const userEmail = user?.primaryEmailAddress?.emailAddress;
         
@@ -40,10 +36,7 @@ export default function FinishScreen() {
     };
 
     fetchRecipe();
-  }, [user, recipeId, isLoaded]); // Dependencies remain correct
-
-  console.log("Render → user:", user);
-  console.log("Render → recipe:", recipe);
+  }, [user, recipeId, isLoaded]); 
 
   const steps = recipe?.recipeOutput?.steps;
 

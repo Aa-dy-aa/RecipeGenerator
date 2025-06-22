@@ -34,14 +34,20 @@ function UserRecipeList() {
     <div className='mt-10'>
       <h2 className='font-medium text-xl'>My AI Recipes</h2>
       <div className='grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5'>
-        {recipeList.map((recipe) => (
-          <RecipeCard
-            recipe={recipe}
-            key={recipe.id}
-            
-            onDelete={handleDelete}
-          />
-        ))}
+        {recipeList?.length > 0
+          ? recipeList.map((recipe) => (
+              <RecipeCard
+                recipe={recipe}
+                key={recipe.id}
+                onDelete={handleDelete}
+              />
+            ))
+          : [1, 2, 3, 4, 5].map((item, index) => (
+              <div
+                key={index}
+                className='w-full mt-5 bg-slate-200 animate-pulse rounded-lg h-[270px]'
+              ></div>
+            ))}
       </div>
     </div>
   );
