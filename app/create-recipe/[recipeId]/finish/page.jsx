@@ -5,6 +5,15 @@ import { useUser } from '@clerk/nextjs';
 import { getRecipeByIdAndUser } from '../../../actions/actions';
 import { useParams } from 'next/navigation'; 
 import IngredientsList from '../../[recipeId]/_components/IngredientsList'
+import YouTube from 'react-youtube'
+const opts = {
+      height: '390',
+      width: '640',
+      playerVars: {
+      autoplay: 0,
+      },
+    };
+
 
 export default function FinishScreen() {
   const params = useParams(); 
@@ -55,10 +64,12 @@ return (
     
     {/* Main Content */}
     <div className="flex-1 px-5 md:px-20 lg:px-44 my-7">
-      <div></div>
-      <div>
+      <div className='flex justify-center'>
+        <YouTube videoId={recipe?.content?.videoId} opts={opts}></YouTube>
+      </div>
+      <div className='p-5 bg-pink-50 mb-3 rounded-lg'>
         {steps && steps.length > 0 ? (
-        <ol className="list-decimal pl-4 space-y-2">
+        <ol className="list-decimal pl-4 space-y-2 font-medium text-lg">
           {steps.map((step, index) => (
             <li key={index}>{step}</li>
           ))}

@@ -1,6 +1,13 @@
+'use client'
 import React from 'react'
+import { useRouter } from 'next/navigation'
 
 function Hero() {
+   const router = useRouter();
+
+  const handleGetStarted = () => {
+    router.push('/dashboard'); 
+  }
   return (
     <section className="bg-white lg:grid  lg:place-content-center -mt-8 ml-25">
   <div
@@ -17,14 +24,14 @@ function Hero() {
         Get inspired and keep only the pleasure of cooking, without the limitations!
       </p>
 
-      <div className="mt-4 flex gap-4 sm:mt-6">
-        <a
-  className="inline-block rounded border bg-[#E45C55] px-5 py-3 font-medium text-white shadow-sm transition-colors hover:bg-[#FFA5A0]"
-  href="#"
->
-  Get Started
-</a>
-      </div>
+       <div className="mt-4 flex gap-4 sm:mt-6">
+            <button
+              className="inline-block rounded border bg-[#E45C55] px-5 py-3 font-medium text-white shadow-sm transition-colors hover:bg-[#FFA5A0]"
+              onClick={handleGetStarted}
+            >
+              Get Started
+            </button>
+          </div>
     </div>
 
     <svg
