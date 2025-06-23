@@ -1,24 +1,25 @@
-'use client'; 
+'use client';
 
 import { useEffect, useState } from 'react';
 import { useUser } from '@clerk/nextjs';
-import { getRecipeByIdAndUser } from '../../../actions/actions'; 
-import { useSearchParams } from 'next/navigation'; // Import useSearchParams
+import { getRecipeByIdAndUser } from '../../../actions/actions';
+import { useParams } from 'next/navigation'; 
+import IngredientsList from '../../[recipeId]/_components/IngredientsList'
 
-export default function FinishScreen() { 
-  const searchParams = useSearchParams(); 
-  const recipeId = searchParams.get('recipeId'); 
+export default function FinishScreen() {
+  const params = useParams(); 
+  const recipeId = params.recipeId; 
 
   const { user, isLoaded } = useUser();
   const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
-    console.log("Checking inputs — recipeId (from URL query):", recipeId, "user:", user, "isLoaded:", isLoaded);
+    console.log("Checking inputs — recipeId:", recipeId, "user:", user, "isLoaded:", isLoaded);
 
     const fetchRecipe = async () => {
-      if (isLoaded && user && recipeId) { 
+      if (isLoaded && user && recipeId) {
         const userEmail = user?.primaryEmailAddress?.emailAddress;
-        
+
         if (userEmail) {
           try {
             const result = await getRecipeByIdAndUser(recipeId, userEmail);
@@ -27,8 +28,6 @@ export default function FinishScreen() {
           } catch (error) {
             console.error("Error fetching recipe:", error);
           }
-        } else {
-          console.log("User email not available yet, or primary email address is missing.");
         }
       } else {
         console.log("Skipping fetch: user not loaded or recipeId missing.", { isLoaded, user, recipeId });
@@ -36,13 +35,29 @@ export default function FinishScreen() {
     };
 
     fetchRecipe();
-  }, [user, recipeId, isLoaded]); 
+  }, [user, recipeId, isLoaded]);
 
   const steps = recipe?.recipeOutput?.steps;
 
-  return (
-    <div className="px-10 md:px-20 lg:px-44 my-7">
-      {steps && steps.length > 0 ? (
+return (
+  <div className="flex min-h-screen">
+    {/* Sidebar */}
+    <div className='w-64 hidden md:block bg-pink-50 border-r shadow-sm'>
+      <h2 style={{ backgroundColor: '#FF7B74' }} className='font-medium text-lg p-3 text-white'>{recipe?.recipeOutput?.recipeName}</h2>
+      <div>
+        {recipe?.recipeOutput?.ingredients?.map((ingredient, index) => (
+          <div key={index}>
+            <IngredientsList ingredient={ingredient} index={index} />
+          </div>
+        ))}
+      </div>
+    </div>
+    
+    {/* Main Content */}
+    <div className="flex-1 px-5 md:px-20 lg:px-44 my-7">
+      <div></div>
+      <div>
+        {steps && steps.length > 0 ? (
         <ol className="list-decimal pl-4 space-y-2">
           {steps.map((step, index) => (
             <li key={index}>{step}</li>
@@ -53,6 +68,8 @@ export default function FinishScreen() {
       ) : (
         <p>Loading recipe...</p>
       )}
+      </div>
     </div>
-  );
+  </div>
+);
 }
