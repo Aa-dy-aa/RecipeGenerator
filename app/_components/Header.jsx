@@ -17,6 +17,7 @@ function Header() {
         style={{ backgroundColor: '#FF7B74' }}
         className="text-white hover:opacity-90"
         onClick={handleGetStarted}
+        type="button"
       >
         Get Started
       </Button>
