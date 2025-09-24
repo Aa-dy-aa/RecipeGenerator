@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 export default function useUserDetails() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoaded, setLoaded] = useState(false);
 
   useEffect(() => {
     fetch("/api/secret", {
@@ -19,8 +19,8 @@ export default function useUserDetails() {
         console.log(err.message);
         setUser(null);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setLoaded(true));
   }, []);
 
-  return { user, loading };
+  return { user, isLoaded };
 }

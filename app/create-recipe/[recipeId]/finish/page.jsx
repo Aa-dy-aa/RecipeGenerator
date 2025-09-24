@@ -22,7 +22,7 @@ export default function FinishScreen() {
   const recipeId = params.recipeId; 
 
   // const { user, isLoaded } = useUser();
-  const {user,isLoaded  } = userDetails();
+  const {user,isLoaded} = userDetails();
   const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
