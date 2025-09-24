@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Button } from "../../components/ui/button";
 import { useRouter } from 'next/navigation'
-
+import Link from 'next/link';
 function Header() {
    const router = useRouter();
   
@@ -20,6 +20,19 @@ function Header() {
       >
         Get Started
       </Button>
+      <div className="space-x-4">
+        <Link href="/login">
+          <button className="px-6 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600">
+            Login
+          </button>
+        </Link>
+
+        <Link href="/register">
+          <button className="px-6 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600">
+            Register
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }

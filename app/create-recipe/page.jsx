@@ -8,7 +8,7 @@ import SelectCategory from './_components/SelectCategory';
 import SelectOption from './_components/SelectOption';
 import Ingredients from './_components/Ingredients';
 import LoadingDialog from './_components/LoadingDialog';
-import {useUser} from '@clerk/nextjs';
+// import {useUser} from '@clerk/nextjs';
 import { saveRecipeToDatabase } from '../actions/actions';
 import {useRouter} from 'next/navigation';
 
@@ -34,7 +34,7 @@ function CreateRecipe() {
   const [activeIndex, setActiveIndex] = useState(0);
   const { userRecipeInput } = useContext(UserInputContext);
   const [loading, setLoading] = useState(false);
-  const {user}=useUser();
+  // const {user}=useUser();
   const router=useRouter()
 
   useEffect(() => {

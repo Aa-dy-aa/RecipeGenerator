@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useUser } from '@clerk/nextjs';
+// import { useUser } from '@clerk/nextjs';
 import { getRecipeByIdAndUser } from '../../../actions/actions';
 import { useParams } from 'next/navigation'; 
 import IngredientsList from '../../[recipeId]/_components/IngredientsList'
