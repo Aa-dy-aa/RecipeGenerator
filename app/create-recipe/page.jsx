@@ -9,6 +9,7 @@ import SelectOption from './_components/SelectOption';
 import Ingredients from './_components/Ingredients';
 import LoadingDialog from './_components/LoadingDialog';
 // import {useUser} from '@clerk/nextjs';
+import userDetails from '/app/(auth)/userDetails.js';
 import { saveRecipeToDatabase } from '../actions/actions';
 import {useRouter} from 'next/navigation';
 
@@ -35,6 +36,7 @@ function CreateRecipe() {
   const { userRecipeInput } = useContext(UserInputContext);
   const [loading, setLoading] = useState(false);
   // const {user}=useUser();
+  const {user,loader} = userDetails();
   const router=useRouter()
 
   useEffect(() => {
@@ -109,9 +111,9 @@ Ensure the recipe is an authentic ${cuisineType} dish. Do not include any introd
         cuisineType,
         cuisineCategory,
         duration,
-        user?.primaryEmailAddress?.emailAddress,
-        user?.fullName,                     
-        user?.imageUrl ,
+        user.email,
+        user.name,                     
+        user.photo,
         recipeLayout.info,
         recipeLayout.serves,
         recipeLayout.caloriesPerServing,

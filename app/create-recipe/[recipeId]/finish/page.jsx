@@ -5,7 +5,9 @@ import { useEffect, useState } from 'react';
 import { getRecipeByIdAndUser } from '../../../actions/actions';
 import { useParams } from 'next/navigation'; 
 import IngredientsList from '../../[recipeId]/_components/IngredientsList'
-import YouTube from 'react-youtube'
+import YouTube from 'react-youtube';
+import userDetails from '/app/(auth)/userDetails.js';
+
 const opts = {
       height: '390',
       width: '640',
@@ -19,7 +21,8 @@ export default function FinishScreen() {
   const params = useParams(); 
   const recipeId = params.recipeId; 
 
-  const { user, isLoaded } = useUser();
+  // const { user, isLoaded } = useUser();
+  const {user,isLoaded  } = userDetails();
   const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
@@ -27,7 +30,7 @@ export default function FinishScreen() {
 
     const fetchRecipe = async () => {
       if (isLoaded && user && recipeId) {
-        const userEmail = user?.primaryEmailAddress?.emailAddress;
+        const userEmail = user.email;
 
         if (userEmail) {
           try {

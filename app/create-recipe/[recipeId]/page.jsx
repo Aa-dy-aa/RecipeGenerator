@@ -10,9 +10,11 @@ import { Button } from '../../../components/ui/button';
 import service from '../../../configs/service'
 import {useRouter} from 'next/navigation'
 import { saveVideoDataToDB } from '../../actions/actions';
+import userDetails from '/app/(auth)/userDetails.js';
+
 
 function RecipeLayout(rawParams) {
-  const { user } = useUser();
+  const { user,loading } = userDetails();
   const [recipe, setRecipe] = useState(null);
   const router=useRouter();
 
@@ -21,7 +23,7 @@ function RecipeLayout(rawParams) {
 
   const fetchRecipe = async () => {
     if (user && recipeId) { 
-      const userEmail = user?.primaryEmailAddress?.emailAddress;
+      const userEmail = user.email;
       const result = await getRecipeByIdAndUser(recipeId, userEmail);
       console.log('Fetched recipe:', result); 
       setRecipe(result);
