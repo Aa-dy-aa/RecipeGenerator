@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useContext } from 'react';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { UserInputContext } from '../../_context/UserInputContext';

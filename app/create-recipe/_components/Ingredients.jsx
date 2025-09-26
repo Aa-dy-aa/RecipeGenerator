@@ -1,3 +1,4 @@
+"use client"
 import React, { useContext }   from 'react';
 import { TextField, Typography } from '@mui/material';
 import { UserInputContext } from '../../_context/UserInputContext';

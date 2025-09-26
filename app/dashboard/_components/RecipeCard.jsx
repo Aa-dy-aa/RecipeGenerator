@@ -1,3 +1,4 @@
+"use client"
 import React,{useState,useEffect} from 'react';
 import { HiEllipsisVertical, HiOutlineClipboardDocumentCheck } from "react-icons/hi2";
 import DropdownOption from '../_components/DropdownOption';
